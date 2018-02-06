@@ -1,5 +1,7 @@
 class Ring 
 {
+  int index;
+  
   PVector center;
   float radius;
   
@@ -34,6 +36,11 @@ class Ring
     
   }
   
+  
+  int getTotalLinks()
+  {
+    return numberOfLinks; 
+  }
   
   private PVector calcLinkPosition(int index) 
   {

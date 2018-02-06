@@ -6,12 +6,17 @@ class Mass
   {
     rings = new ArrayList<Ring>();
     
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1; i++) {
       rings.add(new Ring()); 
     }
     
   }
   
+  
+  int getLinksInRing(int index)
+  {
+    return rings.get(index).getTotalLinks();
+  }
   
   void update() 
   {
