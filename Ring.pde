@@ -15,8 +15,16 @@ class Ring
   float linkSpacing;
   ArrayList<Link> links;
   
-  Ring() 
+  AudioContext ac;
+    
+  float baseFreq;
+  
+  
+  Ring(AudioContext ac, int index) 
   {
+    this.ac = ac;
+    baseFreq = 220;
+           
     center = new PVector(width/2, height/2);  
     radius = random(20, 300);
     
@@ -31,16 +39,10 @@ class Ring
     
     links = new ArrayList<Link>();
     for (int i = 0; i < numberOfLinks; i++) {   
-       links.add(new Link(i, linkSize, calcLinkPosition(i)));
+      links.add(new Link(ac, i, linkSize, calcLinkPosition(i), baseFreq));
     }
-    
   }
-  
-  
-  int getTotalLinks()
-  {
-    return numberOfLinks; 
-  }
+   
   
   private PVector calcLinkPosition(int index) 
   {
@@ -67,6 +69,12 @@ class Ring
   }
   
   
+  void killAll()
+  {
+    for (Link l: links) {
+      l.kill(); 
+    }
+  }
   
   
   

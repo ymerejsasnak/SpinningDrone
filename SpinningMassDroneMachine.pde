@@ -14,6 +14,7 @@ void setup()
   
   
   mass = new Mass();
+  
 }
 
 
@@ -31,5 +32,6 @@ void draw()
 
 void mousePressed()
 {
+  mass.killAll();
   mass = new Mass(); 
 }
