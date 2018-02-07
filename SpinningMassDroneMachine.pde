@@ -28,7 +28,7 @@ void draw()
   mass.update();
   mass.display();
   
-  println(frameRate);
+ // println(frameRate);
   
 }
 

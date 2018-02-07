@@ -18,7 +18,7 @@ class Link
   
   //LPRezFilter lpUgen;
   
-  final int SIZE_VARIATION = 9;
+  final int SIZE_VARIATION = 15;
   final float FREQ_RANGE = 1.025;
   
   final float GAIN_MIN = 0.01;
@@ -26,7 +26,7 @@ class Link
   
   Buffer waveType;
   
-  Link(AudioContext ac, int index, int size, PVector position, float baseFreq, Buffer waveType, LPRezFilter lpUgen)
+  Link(AudioContext ac, int index, int size, PVector position, float baseFreq, Buffer waveType, BiquadFilter lpUgen)
   {
     this.index = index; 
     
@@ -57,7 +57,7 @@ class Link
     this.position = position;
     
     linkPitchGlide.setValue(map(position.y, height, 0, baseFreq / FREQ_RANGE, baseFreq * FREQ_RANGE));
-    linkGainGlide.setValue(map(size, 1, 49, GAIN_MIN, GAIN_MAX));
+    linkGainGlide.setValue(map(size, 5, 45, GAIN_MIN, GAIN_MAX));
     linkPanGlide.setValue(map(position.x, 0, width, -1, 1));
   }
   

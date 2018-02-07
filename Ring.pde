@@ -23,7 +23,7 @@ class Ring
   
   Glide lpFreqGlide;
   Glide lpRezGlide;
-  LPRezFilter lpUgen;
+  BiquadFilter lpUgen;
   
   final Buffer[] WAVE_TYPES = {Buffer.SQUARE, Buffer.TRIANGLE, Buffer.SAW, Buffer.SAW};  
   
@@ -31,14 +31,14 @@ class Ring
   final int RADIUS_MIN = 20;
   final int RADIUS_MAX = 300;
   
-  final int LINK_SIZE_MIN = 10;
-  final int LINK_SIZE_MAX = 40;
+  final int LINK_SIZE_MIN = 20;
+  final int LINK_SIZE_MAX = 30;
   
   final float SPEED_MIN = 0.001;
   final float SPEED_MAX = 0.02;
   
-  final int LINK_NUMBER_MIN = 3;
-  final int LINK_NUMBER_MAX = 12;
+  final int LINK_NUMBER_MIN = 2;
+  final int LINK_NUMBER_MAX = 6;
   
   
   Ring(AudioContext ac, int index)
@@ -50,7 +50,9 @@ class Ring
     
     lpFreqGlide = new Glide(ac, 0, GLIDE_TIME);
     lpRezGlide = new Glide(ac, 0, GLIDE_TIME);
-    lpUgen = new LPRezFilter(ac, lpFreqGlide, lpRezGlide);
+    lpUgen = new BiquadFilter(ac, 2, BiquadFilter.Type.LP);
+    lpUgen.setFrequency(lpFreqGlide);
+    lpUgen.setQ(lpRezGlide);
            
     center = new PVector(width/2, height/2);  
     radius = random(RADIUS_MIN, RADIUS_MAX);
@@ -70,9 +72,10 @@ class Ring
       links.add(new Link(ac, i, linkSize, calcLinkPosition(i), baseFreq, waveType, lpUgen));
     }
     
-    changeRate = random(0.0001, 0.001);
+    changeRate = random(0.0001, 0.0002);
     
     ac.out.addInput(lpUgen);
+    println(lpUgen.getOuts());
   }
    
   
@@ -86,9 +89,11 @@ class Ring
   
   void update()
   {
-    speed = map(noise((float)millis() * changeRate + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
-    radius = map(noise((float)millis() * changeRate + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX);
-    rotationAngle += direction * speed; 
+    float mY = map(mouseY, height, 0, .25, 1.5);
+    float mX = map(mouseX, 0, width, 0, 10);
+    speed = map(noise((float)millis() * changeRate  + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
+    radius = map(noise((float)millis() * changeRate + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX) * mY;
+    rotationAngle += direction * (speed * mX); 
     for (Link l: links) {
       l.update(calcLinkPosition(l.index));
     }
