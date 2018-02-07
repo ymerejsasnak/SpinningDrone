@@ -32,6 +32,7 @@ void draw()
 
 void mousePressed()
 {
+  // this is only temporary...need to do this cleaner
   mass.killAll();
   mass = new Mass(); 
 }
