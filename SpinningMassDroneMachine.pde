@@ -4,6 +4,9 @@ import beads.*;
 Mass mass;
 
 
+final int GLIDE_TIME = 25;
+  
+
 void setup()
 {
   size(600, 600);

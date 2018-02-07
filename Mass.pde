@@ -1,6 +1,6 @@
 class Mass
 {
-  final int TOTAL_RINGS = 5;  
+  final int TOTAL_RINGS = 10;  
   
   AudioContext ac;
    
@@ -16,7 +16,7 @@ class Mass
     rings = new ArrayList<Ring>();
     
     for (int i = 0; i < TOTAL_RINGS; i++) {
-      rings.add(new Ring(ac)); 
+      rings.add(new Ring(ac, i)); 
     }
     
   }

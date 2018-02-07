@@ -16,15 +16,17 @@ class Link
   
   float baseFreq;
   
+  //LPRezFilter lpUgen;
   
   final int SIZE_VARIATION = 9;
-  final float FREQ_RANGE = 1.01;
+  final float FREQ_RANGE = 1.025;
   
   final float GAIN_MIN = 0.01;
   final float GAIN_MAX = 0.02;
   
+  Buffer waveType;
   
-  Link(AudioContext ac, int index, int size, PVector position, float baseFreq)
+  Link(AudioContext ac, int index, int size, PVector position, float baseFreq, Buffer waveType, LPRezFilter lpUgen)
   {
     this.index = index; 
     
@@ -34,18 +36,19 @@ class Link
     this.ac = ac;
 
     this.baseFreq = baseFreq;
+    this.waveType = waveType;
     
-    linkGainGlide = new Glide(ac, 0, 100);
+    linkGainGlide = new Glide(ac, 0, GLIDE_TIME);
     linkGainUgen = new Gain(ac, 1, linkGainGlide);
-    linkPitchGlide = new Glide(ac, baseFreq, 100);
-    linkPanGlide = new Glide(ac, 0, 100);
+    linkPitchGlide = new Glide(ac, baseFreq, GLIDE_TIME);
+    linkPanGlide = new Glide(ac, 0, GLIDE_TIME);
     linkPanUgen = new Panner(ac, linkPanGlide);
     
-    linkWave = new WavePlayer(ac, linkPitchGlide, Buffer.TRIANGLE);
+    linkWave = new WavePlayer(ac, linkPitchGlide, waveType);
     
     linkGainUgen.addInput(linkWave);
     linkPanUgen.addInput(linkGainUgen);
-    ac.out.addInput(linkPanUgen);
+    lpUgen.addInput(linkPanUgen);
   }
   
   
