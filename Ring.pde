@@ -1,8 +1,11 @@
 class Ring 
 {
-  final Buffer[] WAVE_TYPES = {Buffer.SQUARE, Buffer.SAW};  
+  final Buffer[] WAVE_TYPES = {Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE,
+                               Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE, Buffer.NOISE};  
   
   final float[] POSSIBLE_FREQS = {110, 137.5, 165, 220};
+  final float[] POSSIBLE_OCTAVES = {.5, 1, 2, 4};
+  
   final int RADIUS_MIN = 20;
   final int RADIUS_MAX = 300;
   
@@ -47,7 +50,7 @@ class Ring
     this.index = index;
     
     this.ac = ac;
-    baseFreq = POSSIBLE_FREQS[index % POSSIBLE_FREQS.length];
+    baseFreq = POSSIBLE_FREQS[index % POSSIBLE_FREQS.length] * POSSIBLE_OCTAVES[(int)random(POSSIBLE_OCTAVES.length)] ;
     
     lpFreqGlide = new Glide(ac, 0, GLIDE_TIME);
     lpRezGlide = new Glide(ac, 0, GLIDE_TIME);
@@ -90,7 +93,7 @@ class Ring
   void update()
   {
     float mY = map(mouseY, height, 0, .25, 1.5);
-    float mX = map(mouseX, 0, width, 1, 4);
+    float mX = map(mouseX, 0, width, .2, 4);
     speed = map(noise((float)millis() * changeRate  + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
     radius = map(noise((float)millis() * changeRate + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX) * mY;
     linkSize = (int) map(noise((float)millis() * changeRate + index * 12), 0, 1, LINK_SIZE_MIN, LINK_SIZE_MAX);
@@ -100,7 +103,7 @@ class Ring
     }
     
     lpFreqGlide.setValue(map(radius, RADIUS_MIN, RADIUS_MAX, 200, 7000));
-    lpRezGlide.setValue(map(mX, 1, 4, .1, 1));
+    lpRezGlide.setValue(map(mX, .2, 4, .1, 1));
     println(lpRezGlide.getValue());
   }
   

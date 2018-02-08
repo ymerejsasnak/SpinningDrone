@@ -1,7 +1,3 @@
-// start w/ 0 or 1 rings, click to add a ring
-
-// color based on wave type
-
 // more interaction
 
 //cleanup code stuff
@@ -12,7 +8,7 @@
 
 // add delay/verb before main out?
 
-// mousewheel should control something too?
+// mousewheel should control something too? -- y pos freq range!
 
 import beads.*;
 
