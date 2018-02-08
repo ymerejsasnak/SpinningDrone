@@ -1,7 +1,6 @@
 class Link
 {
   final int SIZE_VARIATION = 20;
-  final float FREQ_RANGE = 1.02; // mousewheel changes this! (for subtle drone, 1.015 is good, but higher values are cool too!)
   
   final float GAIN_MIN = 0.001;
   final float GAIN_MAX = 0.02;
@@ -59,7 +58,7 @@ class Link
     this.linkSize = linkSize;
     variation = map(noise((float)millis() *  0.001 + index * 100), 0, 1, -SIZE_VARIATION, SIZE_VARIATION);
     
-    linkPitchGlide.setValue(map(position.y, height, 0, baseFreq / FREQ_RANGE, baseFreq * FREQ_RANGE));
+    linkPitchGlide.setValue(map(position.y, height, 0, baseFreq / currentFreqRange, baseFreq * currentFreqRange));
     linkGainGlide.setValue(map(linkSize + variation, 0, 50, GAIN_MIN, GAIN_MAX));
     linkPanGlide.setValue(map(position.x, 0, width, -1, 1));
   }
@@ -79,7 +78,7 @@ class Link
     
     if      (waveType == Buffer.TRIANGLE) fill(0, 0, c, alpha);
     else if (waveType == Buffer.SQUARE)   fill(0, c, 0, alpha);
-    else if (waveType == Buffer.SAW)      fill(c, 0, 0, alpha);
+    else if (waveType == Buffer.SAW)      fill(0, c, c / 2, alpha);
     
     ellipse(position.x, position.y, linkSize + variation, linkSize + variation);
   }

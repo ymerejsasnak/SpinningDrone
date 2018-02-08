@@ -2,18 +2,18 @@ class Ring
 {
   final Buffer[] WAVE_TYPES = {Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE,
                                Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE, Buffer.NOISE};  
-  
-  final float[] POSSIBLE_FREQS = {110, 137.5, 165, 220};
+                                        //M3      //4th      //5th   //M7     //8ve
+  final float[] POSSIBLE_FREQS = {110, 139.21875, 146.6666667, 165, 195.555556, 220};
   final float[] POSSIBLE_OCTAVES = {.5, 1, 2, 4};
   
-  final int RADIUS_MIN = 20;
-  final int RADIUS_MAX = 300;
+  final int RADIUS_MIN = 40;
+  final int RADIUS_MAX = 200;
   
   final int LINK_SIZE_MIN = 20;
   final int LINK_SIZE_MAX = 30;
   
   final float SPEED_MIN = 0.001;
-  final float SPEED_MAX = 0.02;
+  final float SPEED_MAX = 0.1;
   
   final int LINK_NUMBER_MIN = 2;
   final int LINK_NUMBER_MAX = 5;
@@ -59,18 +59,15 @@ class Ring
     lpUgen.setQ(lpRezGlide);
            
     center = new PVector(width/2, height/2);  
-    radius = random(RADIUS_MIN, RADIUS_MAX);
-    
-    linkSize = (int) random(LINK_SIZE_MIN, LINK_SIZE_MAX);
-    
+        
     rotationAngle = 0;
     direction = random(-1, 1) > 0 ? 1 : -1;
-    speed = random(SPEED_MIN, SPEED_MAX);
-    
+        
     numberOfLinks = (int) random(LINK_NUMBER_MIN, LINK_NUMBER_MAX);
     linkSpacing = TAU / numberOfLinks;
     
     Buffer waveType = WAVE_TYPES[(int)random(WAVE_TYPES.length)];
+    
     links = new ArrayList<Link>();
     for (int i = 0; i < numberOfLinks; i++) {   
       links.add(new Link(ac, index * 100 + i, calcLinkPosition(i), baseFreq, waveType, lpUgen));
@@ -94,17 +91,17 @@ class Ring
   {
     float mY = map(mouseY, height, 0, .25, 1.5);
     float mX = map(mouseX, 0, width, .2, 4);
-    speed = map(noise((float)millis() * changeRate  + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
-    radius = map(noise((float)millis() * changeRate + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX) * mY;
+    speed = map(noise((float)millis() * changeRate * userNoiseScaling + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
+    radius = map(noise((float)millis() * changeRate * userNoiseScaling + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX) * mY;
     linkSize = (int) map(noise((float)millis() * changeRate + index * 12), 0, 1, LINK_SIZE_MIN, LINK_SIZE_MAX);
     rotationAngle += direction * (speed * mX); 
     for (Link l: links) {
       l.update(linkSize, calcLinkPosition(l.index));
     }
     
-    lpFreqGlide.setValue(map(radius, RADIUS_MIN, RADIUS_MAX, 200, 7000));
-    lpRezGlide.setValue(map(mX, .2, 4, .1, 1));
-    println(lpRezGlide.getValue());
+    lpFreqGlide.setValue(map(radius, RADIUS_MIN * .25, RADIUS_MAX * 1.5, 200, 7000));
+    lpRezGlide.setValue(map(speed * mX, SPEED_MIN * .2, SPEED_MAX * 4, .1, 1));
+
   }
   
   
