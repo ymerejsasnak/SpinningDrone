@@ -1,24 +1,22 @@
 class Mass
 {
-  final int TOTAL_RINGS = 10;  
-  
   AudioContext ac;
    
   ArrayList<Ring> rings;
+  int ringIndex;
   
   Mass() 
-  {
-    
+  {   
     ac = new AudioContext();
     ac.start();
-    
-    
-    rings = new ArrayList<Ring>();
-    
-    for (int i = 0; i < TOTAL_RINGS; i++) {
-      rings.add(new Ring(ac, i)); 
-    }
-    
+
+    rings = new ArrayList<Ring>();    
+  }
+  
+  
+  void addRing()
+  {
+    rings.add(new Ring(ac, rings.size())); 
   }
    
   
@@ -36,14 +34,5 @@ class Mass
       r.display(); 
     }
   }
-  
-  
-  void killAll()
-  {
-    for (Ring r: rings) {
-      r.killAll(); 
-    }
-  }
-  
-  
+    
 }

@@ -1,9 +1,17 @@
 class Link
 {
+  final int SIZE_VARIATION = 20;
+  final float FREQ_RANGE = 1.015;
+  
+  final float GAIN_MIN = 0.001;
+  final float GAIN_MAX = 0.02;
+  
+  
   int index; 
   
   PVector position;
-  int size;
+  int linkSize;
+  float variation;
   
   AudioContext ac;
   
@@ -16,21 +24,13 @@ class Link
   
   float baseFreq;
   
-  //LPRezFilter lpUgen;
-  
-  final int SIZE_VARIATION = 15;
-  final float FREQ_RANGE = 1.025;
-  
-  final float GAIN_MIN = 0.01;
-  final float GAIN_MAX = 0.02;
-  
   Buffer waveType;
   
-  Link(AudioContext ac, int index, int size, PVector position, float baseFreq, Buffer waveType, BiquadFilter lpUgen)
+  
+  Link(AudioContext ac, int index, PVector position, float baseFreq, Buffer waveType, BiquadFilter lpUgen)
   {
     this.index = index; 
-    
-    this.size = size + (int) random(-SIZE_VARIATION, SIZE_VARIATION);
+        
     this.position = position;
     
     this.ac = ac;
@@ -52,27 +52,23 @@ class Link
   }
   
   
-  void update(PVector position)
+  void update(int linkSize, PVector position)
   {
     this.position = position;
     
+    this.linkSize = linkSize;
+    variation = map(noise((float)millis() *  0.001 + index * 100), 0, 1, -SIZE_VARIATION, SIZE_VARIATION);
+    
     linkPitchGlide.setValue(map(position.y, height, 0, baseFreq / FREQ_RANGE, baseFreq * FREQ_RANGE));
-    linkGainGlide.setValue(map(size, 5, 45, GAIN_MIN, GAIN_MAX));
+    linkGainGlide.setValue(map(linkSize + variation, 0, 50, GAIN_MIN, GAIN_MAX));
     linkPanGlide.setValue(map(position.x, 0, width, -1, 1));
   }
   
   
   void display()
   {
-    fill(baseFreq / 2, 150);
-    ellipse(position.x, position.y, size, size);
+    fill(baseFreq / 3, 150);
+    ellipse(position.x, position.y, linkSize + variation, linkSize + variation);
   }
-  
-  
-  void kill()
-  {
-    linkWave.pause(true);
-    linkWave.kill(); 
-  }
-  
+    
 }

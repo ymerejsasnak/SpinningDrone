@@ -1,3 +1,19 @@
+// start w/ 0 or 1 rings, click to add a ring
+
+// color based on wave type
+
+// more interaction
+
+//cleanup code stuff
+
+// fix audio, esp loading/start and end/kill stuff
+
+// right click to turn from constant to 0 with adding env segments whenever 0 gain (then mousex also controls env length?)
+
+// add delay/verb before main out?
+
+// mousewheel should control something too?
+
 import beads.*;
 
 
@@ -15,7 +31,6 @@ void setup()
   rectMode(CENTER);
   ellipseMode(CENTER);
   
-  
   mass = new Mass();
   
 }
@@ -28,14 +43,13 @@ void draw()
   mass.update();
   mass.display();
   
- // println(frameRate);
+  fill(200);
+  text((int) frameRate, 10, 10);
   
 }
 
 
 void mousePressed()
 {
-  // this is only temporary...need to do this cleaner
-  mass.killAll();
-  mass = new Mass(); 
+  mass.addRing();
 }
