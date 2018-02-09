@@ -68,14 +68,7 @@ class Link
   {
     int c = (int)baseFreq / 4;
     int alpha = 150;
-    
-    
-    if (waveType == Buffer.NOISE) {
-      fill(random(c), alpha);
-      rect(position.x + randomGaussian() * 2, position.y + randomGaussian() * 2, linkSize + variation, linkSize + variation);
-      return;
-    }
-    
+        
     if      (waveType == Buffer.TRIANGLE) fill(0, 0, c, alpha);
     else if (waveType == Buffer.SQUARE)   fill(0, c, 0, alpha);
     else if (waveType == Buffer.SAW)      fill(0, c, c / 2, alpha);

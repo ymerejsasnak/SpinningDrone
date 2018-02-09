@@ -1,13 +1,15 @@
 class Ring 
 {
-  final Buffer[] WAVE_TYPES = {Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE,
-                               Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE, Buffer.NOISE};  
-                                        //M3      //4th      //5th   //M7     //8ve
-  final float[] POSSIBLE_FREQS = {110, 139.21875, 146.6666667, 165, 195.555556, 220};
-  final float[] POSSIBLE_OCTAVES = {.5, 1, 2, 4};
+  final Buffer[] WAVE_TYPES = {Buffer.SAW, Buffer.SQUARE, Buffer.TRIANGLE};
+                             
+  final float[] POSSIBLE_FREQS = {55,
+                                  110, 110 * 3.0/2,
+                                  220, 220 * 81.0/64, 220 * 3.0/2, 
+                                  440, 440 * 9.0/8, 440 * 81.0/64, 440 * 3.0/2, 
+                                  880, 440 * 243.0/128};
   
   final int RADIUS_MIN = 40;
-  final int RADIUS_MAX = 200;
+  final int RADIUS_MAX = 300;
   
   final int LINK_SIZE_MIN = 20;
   final int LINK_SIZE_MAX = 30;
@@ -50,7 +52,7 @@ class Ring
     this.index = index;
     
     this.ac = ac;
-    baseFreq = POSSIBLE_FREQS[index % POSSIBLE_FREQS.length] * POSSIBLE_OCTAVES[(int)random(POSSIBLE_OCTAVES.length)] ;
+    baseFreq = POSSIBLE_FREQS[index % POSSIBLE_FREQS.length];
     
     lpFreqGlide = new Glide(ac, 0, GLIDE_TIME);
     lpRezGlide = new Glide(ac, 0, GLIDE_TIME);
@@ -90,7 +92,7 @@ class Ring
   void update()
   {
     float mY = map(mouseY, height, 0, .25, 1.5);
-    float mX = map(mouseX, 0, width, .2, 4);
+    float mX = map(mouseX, 0, width, 0, 4);
     speed = map(noise((float)millis() * changeRate * userNoiseScaling + index * 10), 0, 1, SPEED_MIN, SPEED_MAX);
     radius = map(noise((float)millis() * changeRate * userNoiseScaling + index * 11), 0, 1, RADIUS_MIN, RADIUS_MAX) * mY;
     linkSize = (int) map(noise((float)millis() * changeRate + index * 12), 0, 1, LINK_SIZE_MIN, LINK_SIZE_MAX);
@@ -99,7 +101,7 @@ class Ring
       l.update(linkSize, calcLinkPosition(l.index));
     }
     
-    lpFreqGlide.setValue(map(radius, RADIUS_MIN * .25, RADIUS_MAX * 1.5, 200, 7000));
+    lpFreqGlide.setValue(map(radius, RADIUS_MIN * .25, RADIUS_MAX * 1.5, 100, 9000));
     lpRezGlide.setValue(map(speed * mX, SPEED_MIN * .2, SPEED_MAX * 4, .1, 1));
 
   }

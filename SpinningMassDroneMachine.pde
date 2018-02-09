@@ -3,12 +3,9 @@
 // fix audio, esp loading/start and end/kill stuff
 //(fade in, fade out?)
 
-// something to turn from constant to 0 with adding env segments whenever 0 gain (then mousex also controls env length?)
+// freq should be able to go very high (4 or 5?)(maybe have keyboard command to tgoggl multiplier to freq range?)
 
-// add delay/verb before main out?  maybe limiting thing too?
-
-// fix frequencies so that lower registers have less notes (ie only unison at lowest, unison and 5th at next, u/3/5 next, etc)
-// (also more control over when noise rings appear)
+//smooth out changes in noise rate control (ie changes to target value, actual value approaches mathematically)
 
 // also some sort of glitch/error related to panner...only occasionally, not sure how to reproduce yet
 
@@ -19,12 +16,11 @@ import beads.*;
 Mass mass;
 
 
-final int GLIDE_TIME = 25;
+final int GLIDE_TIME = 5;
 
 final float FREQ_RANGE_MIN = 1.005;
 final float FREQ_RANGE_MAX = 1.1;
-//final float FREQ_RANGE = 1.02; // mousewheel changes this! (for subtle drone, 1.015 is good, but higher values are cool too!)
-  
+
 float currentFreqRange;
 boolean rightButtonToggle;
 
@@ -35,7 +31,7 @@ float userNoiseScaling = 1;
 
 void setup()
 {
-  size(600, 600);
+  size(1000, 800);
   background(10);  
   
   rectMode(CENTER);
