@@ -1,5 +1,9 @@
 //cleanup code stuff
 
+
+// CAN I JUST LOAD A SAMPLE ONCE AND HAVE EACH SAMPLEPLAYER USE THAT OR WHAT? (SAVE MEMORY)
+
+
 // fix audio, esp loading/start and end/kill stuff
 //(fade in, fade out?)
 
@@ -83,5 +87,12 @@ void mouseWheel(MouseEvent e)
        userNoiseScaling /= 1.1; 
      }
     userNoiseScaling = constrain(userNoiseScaling, NOISE_SCALING_MIN, NOISE_SCALING_MAX);
+  }
+}
+
+void keyPressed()
+{
+  if (key == 'S' || key == 's') {
+    mass.chooseSample(); 
   }
 }

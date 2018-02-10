@@ -47,7 +47,7 @@ class Ring
   BiquadFilter lpUgen;
    
   
-  Ring(AudioContext ac, int index)
+  Ring(AudioContext ac, int index, String samplePath)
   {
     this.index = index;
     
@@ -67,15 +67,24 @@ class Ring
         
     numberOfLinks = (int) random(LINK_NUMBER_MIN, LINK_NUMBER_MAX);
     linkSpacing = TAU / numberOfLinks;
-    
-    Buffer waveType = WAVE_TYPES[(int)random(WAVE_TYPES.length)];
-    
     links = new ArrayList<Link>();
-    for (int i = 0; i < numberOfLinks; i++) {   
-      links.add(new Link(ac, index * 100 + i, calcLinkPosition(i), baseFreq, waveType, lpUgen));
-    }
     
     changeRate = random(0.0001, 0.0002);
+    
+    
+    if (samplePath == "") {
+      Buffer waveType = WAVE_TYPES[(int)random(WAVE_TYPES.length)];
+      
+      for (int i = 0; i < numberOfLinks; i++) {   
+        links.add(new Link(ac, index * 100 + i, calcLinkPosition(i), baseFreq, waveType, lpUgen));
+      }
+    } else {
+      for (int i = 0; i < numberOfLinks; i++) {   
+        links.add(new Link(ac, index * 100 + i, calcLinkPosition(i), baseFreq, samplePath, lpUgen));
+      }
+      
+    }
+    
     
     ac.out.addInput(lpUgen);
   }
